@@ -1,0 +1,9 @@
+1
+ratio,gain,envelope,modulator
+1.0,0.8,1,1
+1
+attack,decay,sustain,release
+0.0,0.0,1.0,0.1
+1
+factor,time,mode
+0.01,1.0,3
