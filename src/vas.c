@@ -9,6 +9,7 @@
 #include <jack/midiport.h>
 
 #include "vas.h"
+#include "vas_version.h"
 
 float a4;
 int env_count;
@@ -45,7 +46,22 @@ static double get_env_gain(struct envelope e, int n);
 static int process(jack_nframes_t num_frames, void *arg);
 static void vas_init(void);
 
-int main(void){
+int main(int argc, char **argv){
+    if(argc == 2){
+        if(!strncmp(argv[1], "-v", 3)){
+            printf("VAS " VAS_VERSION "\n");
+            printf("Copyright (c) " VAS_COPYRIGHT_YEARS
+                " Venus Brock - venus@brock-v.dev\n");
+            return 0;
+        } else{
+            fprintf(stderr, "VAS: Improper usage.\n");
+            return 0;
+        }
+    }
+    if(argc != 1){
+        fprintf(stderr, "VAS: Improper usage.\n");
+        return 0;
+    }
     vas_init();
     
     gui_started = true;
