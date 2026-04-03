@@ -1,9 +1,15 @@
-1
+3
 ratio,gain,envelope,modulator
+1.0,0.8,1,0
 1.0,0.8,1,1
+4.0,0.3,1,0
 1
 attack,decay,sustain,release
-0.0,0.0,1.0,0.1
+0.2,0.2,0.6,0.1
 1
 factor,time,mode
-0.01,1.0,3
+0.02,0.2,3
+
+NOTE
+The contents of this preset are subject to change as this preset is used to
+test features which are worked on currently.
