@@ -45,6 +45,7 @@ static uint32_t rate;
 static double get_env_gain(struct envelope e, int n);
 static int process(jack_nframes_t num_frames, void *arg);
 static void vas_init(void);
+static void vas_reset(void);
 
 int main(int argc, char **argv){
     if(argc == 2){
@@ -83,7 +84,7 @@ int process(jack_nframes_t num_frames, void *arg){
     if(numev) jack_midi_event_get(&ev, port_buf, evdex);
 
     for(jack_nframes_t frame = 0; frame < num_frames; frame++){
-        if((ev.time <= frame) && (evdex < numev)){
+        while((ev.time <= frame) && (evdex < numev)){
             if(ev.buffer[0] == 0x90 + midi_channel){
                 for(int i = 0; i < MAX_POLY; i++){
                     if(notes[i].id != -1) continue;
@@ -105,6 +106,9 @@ int process(jack_nframes_t num_frames, void *arg){
                     notes[i].rtime = 0.0;
                     break;
                 }
+            }
+            if(ev.buffer[0] == 0xb0 + midi_channel){
+                if(ev.buffer[1] == 0x7b) vas_reset();
             }
             evdex++;
             if(evdex < numev)
@@ -242,4 +246,9 @@ void vas_init(void){
     signal(SIGHUP, vas_exit);
     signal(SIGINT, vas_exit);
     return;
+}
+
+// handles 0x7b "all notes off" midi control
+void vas_reset(void){
+    for(int i = 0; i < MAX_POLY; i++) notes[i].id = -1;
 }
