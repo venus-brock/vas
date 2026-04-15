@@ -17,9 +17,11 @@ struct partial{
     float ratio;
     float gain;
     int env;
-    char env_s[80];
+    char env_s[LINE_LEN];
+    char env_ns[LINE_LEN];
     int mod;
-    char mod_s[80];
+    char mod_s[LINE_LEN];
+    char mod_ns[LINE_LEN];
 };
 
 struct envelope{

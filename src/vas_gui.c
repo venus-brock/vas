@@ -51,7 +51,9 @@ void gui_cleanup(void){
 
 void vas_gui_start(void){
     struct nk_context *ctx;
-    char preset_name[80] = "vas_default";
+    char preset_name[LINE_LEN] = "vas_default";
+    char a4s[LINE_LEN] = "440.0";
+    char na4s[LINE_LEN] = "440.0";
 
     memset(&xw, 0, sizeof(xw));
     xw.dpy = XOpenDisplay(NULL);
@@ -86,7 +88,7 @@ void vas_gui_start(void){
     ctx = nk_xlib_init(xw.font, xw.dpy, xw.screen, xw.win, xw.width,
         xw.height);
 
-    while(true){
+    while(true){ // never breaks
         XEvent evt;
         nk_input_begin(ctx);
         while(XPending(xw.dpy)){
@@ -105,28 +107,26 @@ void vas_gui_start(void){
                 nk_vec2(300, 300))){
                 nk_layout_row_static(ctx, 40, 200, 1);
                 nk_edit_string_zero_terminated(ctx, NK_EDIT_FIELD,
-                    preset_name, 79, NULL);
-                if(nk_button_label(ctx, "save")){
+                    preset_name, LINE_LEN - 1, NULL);
+                if(nk_button_label(ctx, "save"))
                     save_preset(preset_name);
-                }
-                if(nk_button_label(ctx, "load")){
+                if(nk_button_label(ctx, "load"))
                     load_preset(preset_name);
-                }
                 nk_menu_end(ctx);
             }
             nk_layout_row_push(ctx, 100);
             if(nk_menu_begin_label(ctx, "options", NK_TEXT_LEFT,
                 nk_vec2(300, 300))){
-                static char a4s[80] = "440.0";
-                char tmp[80];
-                strcpy(tmp, a4s);
                 nk_layout_row_begin(ctx, NK_STATIC, 40, 2);
                 nk_layout_row_push(ctx, 40);
                 nk_label(ctx, "A4:", NK_TEXT_CENTERED);
                 nk_layout_row_push(ctx, 200);
                 nk_edit_string_zero_terminated(ctx, NK_EDIT_FIELD,
-                    a4s, 79, nk_filter_float);
-                if(strcmp(a4s, tmp)) a4 = atof(a4s);
+                    na4s, LINE_LEN - 1, nk_filter_float);
+                if(strcmp(na4s, a4s)){
+                    a4 = atof(na4s);
+                    strcpy(a4s, na4s);
+                }
                 nk_menu_end(ctx);
             }
             nk_end(ctx);
@@ -136,17 +136,17 @@ void vas_gui_start(void){
             NK_WINDOW_TITLE | NK_WINDOW_BORDER)){
             nk_layout_row_begin(ctx, NK_STATIC, 40, 4);
             for(int i = 0; i < part_count; i++){
-                char tmp[80];
                 nk_layout_row_push(ctx, 128);
                 nk_slider_float(ctx, 0, &part[i].gain, 1, 0.01);
                 nk_layout_row_push(ctx, 128);
                 nk_slider_float(ctx, 1, &part[i].ratio, 16, 0.25);
                 nk_layout_row_push(ctx, 40);
-                strcpy(tmp, part[i].env_s);
                 nk_edit_string_zero_terminated(ctx, NK_EDIT_FIELD,
-                    part[i].env_s, 79, nk_filter_decimal);
-                if(strcmp(tmp, part[i].env_s))
-                    part[i].env = atoi(part[i].env_s);
+                    part[i].env_ns, LINE_LEN - 1, nk_filter_decimal);
+                if(strcmp(part[i].env_s, part[i].env_ns)){
+                    part[i].env = atoi(part[i].env_ns);
+                    strcpy(part[i].env_s, part[i].env_ns);
+                }
                 nk_layout_row_push(ctx, 40);
                 if(nk_button_label(ctx, "-")){
                     part_count--;
@@ -170,8 +170,10 @@ void vas_gui_start(void){
                 memset(part + part_count - 1, 0, sizeof(struct partial));
                 part[part_count - 1].ratio = 1.0;   // interval ratio of 0
                                                     // is invalid
-                snprintf(part[part_count - 1].env_s, 80, "%d", 0);
-                snprintf(part[part_count - 1].mod_s, 80, "%d", 0);
+                snprintf(part[part_count - 1].env_s, LINE_LEN, "%d", 0);
+                snprintf(part[part_count - 1].env_ns, LINE_LEN, "%d", 0);
+                snprintf(part[part_count - 1].mod_s, LINE_LEN, "%d", 0);
+                snprintf(part[part_count - 1].mod_ns, LINE_LEN, "%d", 0);
             }
             nk_layout_row_end(ctx);
             nk_end(ctx);

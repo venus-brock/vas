@@ -23,6 +23,8 @@ void load_preset(char *preset_name){
     // rudimentary error checking, and if all is good, the second pass loads it
     // into memory.
 
+    // "goto considered harmful" mfs when they see this function:
+
     char buf[LINE_LEN];
     char *loc = (char*)malloc(strlen(preset_name) + LINE_LEN);
     int n;
@@ -119,8 +121,10 @@ void load_preset(char *preset_name){
         part[i].gain = atof(strtok(NULL, ","));
         part[i].env = atoi(strtok(NULL, ","));
         snprintf(part[i].env_s, LINE_LEN, "%d", part[i].env);
+        snprintf(part[i].env_ns, LINE_LEN, "%d", part[i].env);
         part[i].mod = atoi(strtok(NULL, ","));
         snprintf(part[i].mod_s, LINE_LEN, "%d", part[i].mod);
+        snprintf(part[i].mod_ns, LINE_LEN, "%d", part[i].mod);
     }
 
     // ENVELOPES
