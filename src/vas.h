@@ -15,6 +15,8 @@
 
 struct partial{
     float ratio;
+    char ratio_s[LINE_LEN];
+    char ratio_ns[LINE_LEN];
     float gain;
     int env;
     char env_s[LINE_LEN];

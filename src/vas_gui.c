@@ -138,8 +138,13 @@ void vas_gui_start(void){
             for(int i = 0; i < part_count; i++){
                 nk_layout_row_push(ctx, 128);
                 nk_slider_float(ctx, 0, &part[i].gain, 1, 0.01);
-                nk_layout_row_push(ctx, 128);
-                nk_slider_float(ctx, 1, &part[i].ratio, 16, 0.25);
+                nk_layout_row_push(ctx, 64);
+                nk_edit_string_zero_terminated(ctx, NK_EDIT_FIELD,
+                    part[i].ratio_ns, LINE_LEN - 1, nk_filter_float);
+                if(strcmp(part[i].ratio_s, part[i].ratio_ns)){
+                    part[i].ratio = atof(part[i].ratio_ns);
+                    strcpy(part[i].ratio_s, part[i].ratio_ns);
+                }
                 nk_layout_row_push(ctx, 40);
                 nk_edit_string_zero_terminated(ctx, NK_EDIT_FIELD,
                     part[i].env_ns, LINE_LEN - 1, nk_filter_decimal);

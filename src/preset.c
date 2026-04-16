@@ -118,6 +118,8 @@ void load_preset(char *preset_name){
     for(int i = 0; i < part_count; i++){
         fgets(buf, LINE_LEN, preset);
         part[i].ratio = atof(strtok(buf, ","));
+        snprintf(part[i].ratio_s, LINE_LEN, "%f", part[i].ratio);
+        snprintf(part[i].ratio_ns, LINE_LEN, "%f", part[i].ratio);
         part[i].gain = atof(strtok(NULL, ","));
         part[i].env = atoi(strtok(NULL, ","));
         snprintf(part[i].env_s, LINE_LEN, "%d", part[i].env);
