@@ -132,9 +132,20 @@ void vas_gui_start(void){
             nk_end(ctx);
         }
 
-        if(nk_begin(ctx, "PARTIALS", nk_rect(0, 40, 400, WIN_HEIGHT),
+        if(nk_begin(ctx, "PARTIALS", nk_rect(0, 40, 360, WIN_HEIGHT),
             NK_WINDOW_TITLE | NK_WINDOW_BORDER)){
-            nk_layout_row_begin(ctx, NK_STATIC, 40, 4);
+
+            nk_layout_row_begin(ctx, NK_STATIC, 20, 4);
+            nk_layout_row_push(ctx, 128);
+            nk_label(ctx, "GAIN", NK_TEXT_CENTERED);
+            nk_layout_row_push(ctx, 64);
+            nk_label(ctx, "RATIO", NK_TEXT_CENTERED);
+            nk_layout_row_push(ctx, 40);
+            nk_label(ctx, "ENV", NK_TEXT_CENTERED);
+            nk_layout_row_push(ctx, 40);
+            nk_label(ctx, "MOD", NK_TEXT_CENTERED);
+
+            nk_layout_row_begin(ctx, NK_STATIC, 40, 5);
             for(int i = 0; i < part_count; i++){
                 nk_layout_row_push(ctx, 128);
                 nk_slider_float(ctx, 0, &part[i].gain, 1, 0.01);
@@ -151,6 +162,13 @@ void vas_gui_start(void){
                 if(strcmp(part[i].env_s, part[i].env_ns)){
                     part[i].env = atoi(part[i].env_ns);
                     strcpy(part[i].env_s, part[i].env_ns);
+                }
+                nk_layout_row_push(ctx, 40);
+                nk_edit_string_zero_terminated(ctx, NK_EDIT_FIELD,
+                    part[i].mod_ns, LINE_LEN - 1, nk_filter_decimal);
+                if(strcmp(part[i].mod_s, part[i].mod_ns)){
+                    part[i].mod = atoi(part[i].mod_ns);
+                    strcpy(part[i].mod_s, part[i].mod_ns);
                 }
                 nk_layout_row_push(ctx, 40);
                 if(nk_button_label(ctx, "-")){
@@ -184,7 +202,7 @@ void vas_gui_start(void){
             nk_end(ctx);
         }
 
-        if(nk_begin(ctx, "ENVELOPES", nk_rect(400, 40, 440, WIN_HEIGHT),
+        if(nk_begin(ctx, "ENVELOPES", nk_rect(360, 40, 260, WIN_HEIGHT),
             NK_WINDOW_TITLE | NK_WINDOW_BORDER)){
             for(int i = 0; i < env_count; i++){
                 nk_layout_row_static(ctx, 40, 40, 5);
