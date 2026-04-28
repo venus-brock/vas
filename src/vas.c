@@ -44,26 +44,11 @@ static uint32_t rate;
 
 static double get_env_gain(struct envelope e, int n);
 static int process(jack_nframes_t num_frames, void *arg);
-static void vas_init(void);
+static void vas_init(int argc, char **argv);
 static void vas_reset(void);
 
 int main(int argc, char **argv){
-    if(argc == 2){
-        if(!strncmp(argv[1], "-v", 3)){
-            printf("VAS " VAS_VERSION "\n");
-            printf("Copyright (c) " VAS_COPYRIGHT_YEARS
-                " Venus Brock - venus@brock-v.dev\n");
-            return 0;
-        } else{
-            fprintf(stderr, "VAS: Improper usage.\n");
-            return 0;
-        }
-    }
-    if(argc != 1){
-        fprintf(stderr, "VAS: Improper usage.\n");
-        return 0;
-    }
-    vas_init();
+    vas_init(argc, argv);
     
     gui_started = true;
     vas_gui_start(); // never returns
@@ -189,8 +174,32 @@ void vas_exit(int sig){
     exit(sig);
 }
 
-void vas_init(void){
-    char *client_name = "VAS";
+void vas_init(int argc, char **argv){
+    char client_name[LINE_LEN] = "VAS";
+
+    // Behold!
+    // (It's the argument parser.)
+    if(argc > 1){
+        for(int i = 0; i < argc; i++){
+            if(argv[i][0] != '-') continue;
+            for(int j = 0; j < strlen(argv[i]); j++){
+                switch(argv[i][j]){
+                case 'v':
+                    printf("VAS " VAS_VERSION "\n");
+                    printf("Copyright (c) " VAS_COPYRIGHT_YEARS
+                        " Venus Brock - venus@brock-v.dev\n");
+                    exit(0);
+                case 'n':
+                    if(i + 1 == argc){
+                        fprintf(stderr, "VAS: Must provide client name.\n");
+                        exit(1);
+                    }
+                    strncpy(client_name, argv[i + 1], LINE_LEN - 1);
+                    break;
+                }
+            }
+        }
+    }
 
     client = jack_client_open(client_name, JackNullOption, NULL, NULL);
     if(!client){
