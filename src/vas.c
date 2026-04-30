@@ -182,7 +182,7 @@ void vas_init(int argc, char **argv){
     if(argc > 1){
         for(int i = 0; i < argc; i++){
             if(argv[i][0] != '-') continue;
-            for(int j = 0; j < strlen(argv[i]); j++){
+            for(size_t j = 0; j < strlen(argv[i]); j++){
                 switch(argv[i][j]){
                 case 'v':
                     printf("VAS " VAS_VERSION "\n");
