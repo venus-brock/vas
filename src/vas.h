@@ -1,8 +1,6 @@
 #ifndef VAS_H
 #define VAS_H
 
-#include <stdbool.h>
-
 #define BLOCK_SIZE 8
 #define LINE_LEN 80
 #define MAX_POLY 16
@@ -36,8 +34,8 @@ struct modulator{
     char factor_s[LINE_LEN];
     char factor_ns[LINE_LEN];
     float time;
-    bool shape;
-    bool repeat;
+    int shape;
+    int repeat;
     double offset;
     double soffset;
 };

@@ -262,11 +262,9 @@ void vas_gui_start(void){
                 nk_layout_row_push(ctx, 40);
                 nk_knob_float(ctx, 0, &mod[i].time, 1, 0.01, NK_DOWN, 90);
                 nk_layout_row_push(ctx, 40);
-                static int test = true;
-                static int test2 = false;
-                nk_checkbox_label(ctx, "", &test);
+                nk_checkbox_label(ctx, "", &mod[i].shape);
                 nk_layout_row_push(ctx, 40);
-                nk_checkbox_label(ctx, "", &test2);
+                nk_checkbox_label(ctx, "", &mod[i].repeat);
             }
             nk_end(ctx);
         }
