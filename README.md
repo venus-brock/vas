@@ -33,14 +33,14 @@ cd vas
 
 3 - Build
 
-If you wish to place the VAS executable in your system binaries directory
-and copy the presets to your config folder, run `sudo make install`. Otherwise,
-to simply build VAS, run `make`.
+If necessary, edit config.mk to fit your system, then simply run `make` or
+`sudo make install`. The `install` target will also copy the default presets
+to `~/.config/vas/presets`.
 
 ### TODO
 
 - Improve UI
-- Improve build process
+- Improve build process ✓
 - Handle pitch bend and sustain pedal
 - Write full documentation
 - Create some additional example presets
