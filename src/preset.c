@@ -78,12 +78,12 @@ void load_preset(char *preset_name){
     fgets(buf, LINE_LEN, preset);
     if((n = atoi(buf)) < 0) goto format_err;
     fgets(buf, LINE_LEN, preset);
-    if(strcmp(buf, "factor,time,mode\n")) goto format_err;
+    if(strcmp(buf, "factor,time,shape,repeat\n")) goto format_err;
 
     for(int i = 0; i < n; i++){
         fgets(buf, LINE_LEN, preset);
         if(!(tok = strtok(buf, ","))) goto format_err;
-        for(int j = 0; j < 2; j++){
+        for(int j = 0; j < 3; j++){
             if(!(tok = strtok(NULL, ","))) goto format_err;
         }
     }
@@ -175,7 +175,8 @@ void load_preset(char *preset_name){
         snprintf(mod[i].factor_s, LINE_LEN, "%f", mod[i].factor);
         snprintf(mod[i].factor_ns, LINE_LEN, "%f", mod[i].factor);
         mod[i].time = atof(strtok(NULL, ","));
-        mod[i].mode = atoi(strtok(NULL, ","));
+        mod[i].shape = atoi(strtok(NULL, ","));
+        mod[i].repeat = atoi(strtok(NULL, ","));
         mod[i].soffset = (double)2.0 * mod[i].factor * mod[i].time / M_PI;
         mod[i].offset = get_mod_phase(mod[i], mod[i].time);
     }
@@ -227,9 +228,10 @@ void save_preset(char *preset_name){
         fprintf(preset, "%f,%f,%f,%f\n", env[i].attack, env[i].decay,
             env[i].sustain, env[i].release);
     fprintf(preset, "%d\n", mod_count);
-    fprintf(preset, "factor,time,mode\n");
+    fprintf(preset, "factor,time,shape,repeat\n");
     for(int i = 0; i < mod_count; i++)
-        fprintf(preset, "%f,%f,%d\n", mod[i].factor, mod[i].time, mod[i].mode);
+        fprintf(preset, "%f,%f,%d,%d\n", mod[i].factor, mod[i].time,
+            mod[i].shape, mod[i].repeat);
     fclose(preset);
     free(loc);
     return;

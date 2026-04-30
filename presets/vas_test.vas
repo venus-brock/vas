@@ -7,8 +7,8 @@ ratio,gain,envelope,modulator
 attack,decay,sustain,release
 0.2,0.2,0.6,0.1
 1
-factor,time,mode
-0.02,0.2,3
+factor,time,shape,repeat
+0.02,0.2,1,1
 
 NOTE
 The contents of this preset are subject to change as this preset is used to

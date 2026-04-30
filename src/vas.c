@@ -145,18 +145,18 @@ double get_mod_phase(struct modulator m, double t){
     double offset = m.offset;
     double result;
     if(t <= m.time) offset = 0.0;
-    if(m.mode & VAS_MOD_REPEAT && t > m.time){
+    if(m.repeat && t > m.time){
         dir = (int)(t / m.time) % 2;
         offset *= (int)(t / m.time);
         t = fmod(t, m.time);
     }
     if(t <= m.time && m.time != 0.0){
-        if(m.mode & VAS_MOD_SIN){
+        if(m.shape){ // sine shape
             result = -2 * m.factor * m.time *
                 cos(t * M_PI / ((double)2.0 * m.time)) / M_PI - m.factor * t +
                 t + m.soffset + offset;
         }
-        else{
+        else{ // linear shape
             result = pow(t, 2.0) * m.factor / (2.0 * m.time);
             if(dir)
                 result = result + t - t * m.factor + offset;

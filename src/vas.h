@@ -10,9 +10,6 @@
 #define WIN_HEIGHT 1000
 #define WIN_WIDTH 800
 
-#define VAS_MOD_REPEAT 1
-#define VAS_MOD_SIN 2
-
 struct partial{
     float ratio;
     char ratio_s[LINE_LEN];
@@ -39,7 +36,8 @@ struct modulator{
     char factor_s[LINE_LEN];
     char factor_ns[LINE_LEN];
     float time;
-    int mode;
+    bool shape;
+    bool repeat;
     double offset;
     double soffset;
 };

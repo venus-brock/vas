@@ -12,5 +12,5 @@ ratio,gain,envelope,modulator
 attack,decay,sustain,release
 0.0,0.0,1.0,0.1
 0
-factor,time,mode
+factor,time,shape,repeat
 
