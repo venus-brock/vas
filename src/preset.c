@@ -172,6 +172,8 @@ void load_preset(char *preset_name){
     for(int i = 0; i < mod_count; i++){
         fgets(buf, LINE_LEN, preset);
         mod[i].factor = atof(strtok(buf, ","));
+        snprintf(mod[i].factor_s, LINE_LEN, "%f", mod[i].factor);
+        snprintf(mod[i].factor_ns, LINE_LEN, "%f", mod[i].factor);
         mod[i].time = atof(strtok(NULL, ","));
         mod[i].mode = atoi(strtok(NULL, ","));
         mod[i].soffset = (double)2.0 * mod[i].factor * mod[i].time / M_PI;

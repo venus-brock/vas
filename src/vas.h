@@ -36,6 +36,8 @@ struct envelope{
 
 struct modulator{
     float factor;
+    char factor_s[LINE_LEN];
+    char factor_ns[LINE_LEN];
     float time;
     int mode;
     double offset;

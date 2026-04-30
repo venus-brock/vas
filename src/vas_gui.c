@@ -239,6 +239,38 @@ void vas_gui_start(void){
             nk_end(ctx);
         }
 
+        if(nk_begin(ctx, "MODULATORS", nk_rect(620, 40, 260, WIN_HEIGHT),
+            NK_WINDOW_TITLE | NK_WINDOW_BORDER)){
+            nk_layout_row_begin(ctx, NK_STATIC, 20, 4);
+            nk_layout_row_push(ctx, 80);
+            nk_label(ctx, "FACTOR", NK_TEXT_CENTERED);
+            nk_layout_row_push(ctx, 40);
+            nk_label(ctx, "TIME", NK_TEXT_CENTERED);
+            nk_layout_row_push(ctx, 40);
+            nk_label(ctx, "SHAPE", NK_TEXT_CENTERED);
+            nk_layout_row_push(ctx, 40);
+            nk_label(ctx, "REPEAT", NK_TEXT_CENTERED);
+            for(int i = 0; i < mod_count; i++){
+                nk_layout_row_begin(ctx, NK_STATIC, 40, 4);
+                nk_layout_row_push(ctx, 80);
+                nk_edit_string_zero_terminated(ctx, NK_EDIT_FIELD,
+                    mod[i].factor_ns, LINE_LEN - 1, nk_filter_float);
+                if(strcmp(mod[i].factor_s, mod[i].factor_ns)){
+                    mod[i].factor = atof(mod[i].factor_ns);
+                    strcpy(mod[i].factor_s, mod[i].factor_ns);
+                }
+                nk_layout_row_push(ctx, 40);
+                nk_knob_float(ctx, 0, &mod[i].time, 1, 0.01, NK_DOWN, 90);
+                nk_layout_row_push(ctx, 40);
+                static int test = true;
+                static int test2 = false;
+                nk_checkbox_label(ctx, "", &test);
+                nk_layout_row_push(ctx, 40);
+                nk_checkbox_label(ctx, "", &test2);
+            }
+            nk_end(ctx);
+        }
+
         XClearWindow(xw.dpy, xw.win);
         nk_xlib_render(xw.win, nk_rgb(0, 0, 0));
         XFlush(xw.dpy);
