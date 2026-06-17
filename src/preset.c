@@ -88,16 +88,9 @@ void load_preset(char *preset_name){
         }
     }
 
-    fclose(preset);
+    rewind(preset);
 
     // SECOND PASS
-
-    preset = fopen(loc, "r");
-    if(!preset){
-        fprintf(stderr, "VAS: Failed opening preset file "
-            "\"%s\" for second pass.\n", loc);
-        return;
-    }
 
     // PARTIALS
 
